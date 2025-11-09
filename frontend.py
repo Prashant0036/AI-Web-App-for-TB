@@ -155,8 +155,8 @@ patient_data={
 
 
 
-# backend_url = "http://127.0.0.1:8000/process"  # FastAPI endpoint
-backend_url = "http://127.0.0.1:60902/process"  # FastAPI endpoint
+backend_url = "http://127.0.0.1:8000/process"  # FastAPI endpoint
+# backend_url = "http://127.0.0.1:60902/process"  # FastAPI endpoint
 # is url par request jayegi frontend se
 
 st.markdown("""
