@@ -1,0 +1,26 @@
+# --- Frontend (Streamlit UI) ---
+streamlit==1.39.0
+
+# --- Backend Framework ---
+fastapi==0.115.2
+uvicorn[standard]==0.32.0
+
+# --- HTTP Requests ---
+requests==2.32.3
+
+# --- MongoDB Driver ---
+pymongo==4.10.1
+dnspython==2.7.0
+
+# --- Environment Variables ---
+python-dotenv==1.0.1
+
+# --- LLM Integration (Gemini) ---
+google-generativeai==0.7.1
+
+# --- Required internal FastAPI dependencies ---
+pydantic==2.9.2
+typing-extensions==4.12.2
+
+# --- Optional / nice-to-have ---
+colorama==0.4.6
