@@ -1,56 +1,51 @@
-from LLM import llm_model as llm
+# LLM/handle_user_prompt.py
+import os
+import json
+import re
+from dotenv import load_dotenv
 
-# import asyncio
+load_dotenv()
+from google import genai
+from google.genai import types
 
-import json, re
+def _make_client():
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY is not set in environment.")
+    return genai.Client(api_key=api_key)
 
+async def generate(prompt: str) -> str:
+    client = _make_client()
+    model = "gemini-flash-latest"
+    contents = [types.Content(role="user", parts=[types.Part.from_text(text=prompt)])]
+    tools = [types.Tool(googleSearch=types.GoogleSearch())]
+    generate_content_config = types.GenerateContentConfig(
+        thinking_config=types.ThinkingConfig(thinking_budget=-1),
+        tools=tools,
+    )
+    for chunk in client.models.generate_content_stream(
+        model=model, contents=contents, config=generate_content_config
+    ):
+        return chunk.text
 
+async def get_llm_res(data: dict) -> dict:
+    prompt = f"""You are a TB consultant. Return JSON only, no extra text. Has exactly keys: "score","test","tips".
+score: integer 0-100 estimating TB risk.
+test: recommended test string or "No test".
+tips: 1-2 short tips.
 
+Patient info: {json.dumps(data, ensure_ascii=False)}
+"""
+    try:
+        response_text = await generate(prompt)
+    except Exception as e:
+        return {"score": 0, "test": "error", "tips": f"LLM call failed: {e}"}
 
-
-
-async def get_llm_res(data) :
-    # data is JSON formatted user data
-
-    prompt = f"""Hey! react as a Tuberculosis consultant. 
-            I'm providing my info as a JSON file and you will give me response without any preamble.
-            Your response should be very personalized [use my name] and it should feel like any expert Tuberculosis
-              consultant is consulting with me.
-            
-            response should be also in json format ** under 190 characters **, it must have 3 fields "score", "test" and "tips" and no other text or preamble  :
-
-            response must start with a curly braces then 3 fields and then end with a curly braces, nothing else
-              
-            "score" : give me a TB score (0-100), chances of happening TB to me 
-            according to my symptoms
-            2. "test" : any recommended diagnostic or blood test or whatever else return no test needed
-            3. "tips" : some additional tips according to my behavioural based answers
-
-            Ex. if Smoking or Alcohol is true in my JSON data, you can give tips to avoid it.
-
-            my info is {data} 
-
-        """
-    
-    response = await llm.generate(prompt)
-    match = re.search(r'\{.*\}', response, re.DOTALL)
-    llm_res_dict = {"score":0,"test":"None","tips":"None"}
-    if match:
-      json_str = match.group(0)
-      llm_res_dict = json.loads(json_str)
-      print(type(llm_res_dict))
-      print(llm_res_dict)
-    else:
-      print("No JSON found")
-    # print(response)
-    # return response
-    return llm_res_dict
-
-
-# asyncio.run(get_llm_res({"name":"Pras","age":30}))
-
-
-
-
-
-    
+    match = re.search(r"\{.*\}", response_text or "", re.DOTALL)
+    if not match:
+        return {"score": 0, "test": "No test", "tips": "No JSON from LLM."}
+    try:
+        parsed = json.loads(match.group(0))
+        return parsed
+    except Exception:
+        return {"score": 0, "test": "No test", "tips": "Failed to parse JSON from LLM."}
