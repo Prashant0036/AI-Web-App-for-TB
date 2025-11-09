@@ -19,11 +19,12 @@ load_dotenv()
 import os
 from google import genai
 from google.genai import types
+import streamlit as st
 
 
 async def generate(prompt):
     client = genai.Client(
-        api_key=os.getenv("GEMINI_API_KEY"),
+        api_key=st.secrets["GEMINI_API_KEY"],
     )
 
     model = "gemini-flash-latest"
