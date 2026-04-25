@@ -1,12 +1,15 @@
 import pymongo
-import streamlit as st
+import os
+from dotenv import load_dotenv
 
-myclient = pymongo.MongoClient(st.secrets["DB_URI"])
+load_dotenv()
+
+DB_URI = os.getenv("DB_URI")
+if not DB_URI:
+    raise ValueError("DB_URI not found in environment variables")
+
+myclient = pymongo.MongoClient(DB_URI)
 
 mydb = myclient["db_TB_web_app"]
-# print(myclient.list_database_names())
 mycollection = mydb["Patient_Info"]
-# print(mydb.list_collection_names())
-
-# mydict = { "name": "John", "address": "Highway 37" }
-# x = mycollection.insert_one(mydict)
+users_collection = mydb["Users"]

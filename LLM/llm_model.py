@@ -1,63 +1,33 @@
-# https://ai.google.dev/gemini-api/docs/api-key
-
-# pip install google-generativeai
-
-
-# pip install google-generativeai python-dotenv
-
-
+import os
+from google import genai
+from google.genai import types
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
 
-
-# api_key = os.getenv("GEMINI_API_KEY")
-# print(api_key)
-
-
-import os
-from google import genai
-from google.genai import types
-import streamlit as st
-
+api_key = os.getenv("GEMINI_API_KEY")
 
 async def generate(prompt):
+    if not api_key:
+        raise ValueError("GEMINI_API_KEY not found in environment variables")
+
     client = genai.Client(
-        api_key=st.secrets["GEMINI_API_KEY"],
+        api_key=api_key,
     )
 
-    model = "gemini-flash-latest"
-    contents = [
-        types.Content(
-            role="user",
-            parts=[
-                types.Part.from_text(text=prompt),
-            ],
-        ),
-    ]
-    tools = [
-        types.Tool(googleSearch=types.GoogleSearch(
-        )),
-    ]
-    generate_content_config = types.GenerateContentConfig(
-        thinking_config = types.ThinkingConfig(
-            thinking_budget=-1,
-        ),
-        tools=tools,
-    )
-
-    for chunk in client.models.generate_content_stream(
-        model=model,
-        contents=contents,
-        config=generate_content_config,
-    ):
-        # print(chunk.text, end="")
-        return chunk.text
-
-
-
-
-# if __name__ == "__main__":
-    # generate()
+    model = "gemini-2.0-flash"  # Using 2.0 flash as it's more current than 1.5 flash-latest in most contexts now
+    
+    try:
+        response = client.models.generate_content(
+            model=model,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                tools=[types.Tool(google_search=types.GoogleSearch())],
+            )
+        )
+        return response.text
+    except Exception as e:
+        print(f"Gemini Error: {e}")
+        return f"Error generating response: {e}"
 

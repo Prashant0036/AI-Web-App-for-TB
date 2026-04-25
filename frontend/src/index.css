@@ -1,0 +1,247 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-outfit: "Outfit", sans-serif;
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-secondary: #7c3aed;
+  --color-accent: #2dd4bf;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+}
+
+@utility bg-hero-gradient {
+  background-image: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+}
+
+@layer base {
+  body {
+    @apply bg-white dark:bg-slate-950 min-h-screen text-slate-800 dark:text-slate-200 antialiased transition-colors duration-300;
+  }
+
+  button,
+  [role="button"],
+  a {
+    cursor: pointer;
+  }
+}
+
+/* ───────────────────────────────────────────────
+   Tooltip customisation for Recharts
+─────────────────────────────────────────────── */
+.recharts-default-tooltip {
+  background-color: white !important;
+  border-radius: 12px !important;
+  border: none !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
+  padding: 12px 16px !important;
+}
+
+.dark .recharts-default-tooltip {
+  background-color: #0f172a !important;
+  border: 1px solid #1e293b !important;
+}
+
+.recharts-tooltip-label {
+  color: #1e293b !important;
+  font-weight: 700 !important;
+  margin-bottom: 4px !important;
+}
+
+.dark .recharts-tooltip-label {
+  color: #f1f5f9 !important;
+}
+
+/* ───────────────────────────────────────────────
+   Diagnostic Finder & Report Upload Custom Styles
+─────────────────────────────────────────────── */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+.gm-style-iw {
+  border-radius: 12px !important;
+  padding: 0 !important;
+}
+
+.gm-style-iw-d {
+  overflow: hidden !important;
+}
+
+/* Premium Leaflet Map Styles */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  z-index: 1;
+  background: #f1f5f9 !important;
+}
+
+/* User Location Marker */
+.user-loc-wrapper {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-loc-dot {
+  width: 12px;
+  height: 12px;
+  background: #4f46e5;
+  border: 2px solid white;
+  border-radius: 50%;
+  z-index: 2;
+  box-shadow: 0 0 10px rgba(79, 70, 229, 0.4);
+}
+
+.user-loc-pulse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(79, 70, 229, 0.2);
+  border-radius: 50%;
+  animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.3);
+    opacity: 1;
+  }
+
+  80%,
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Healthcare Pin Animation */
+.pin-container {
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+  transition: transform 0.2s ease;
+}
+
+.pin-container:hover {
+  transform: scale(1.1) translateY(-2px);
+}
+
+/* Premium Popup Styling */
+.premium-popup .leaflet-popup-content-wrapper {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.premium-popup .leaflet-popup-content {
+  margin: 0;
+  width: 240px !important;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-header {
+  padding: 16px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.popup-tag {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 800;
+  color: #4f46e5;
+  background: #eef2ff;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+
+.popup-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.3;
+}
+
+.popup-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.popup-address,
+.popup-phone {
+  margin: 0;
+  font-size: 12px;
+  color: #64748b;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.popup-footer {
+  padding: 12px 16px;
+  background: white;
+}
+
+.popup-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #4f46e5;
+  color: white !important;
+  text-decoration: none !important;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.popup-btn:hover {
+  background: #4338ca;
+}
+
+.premium-popup .leaflet-popup-tip-container {
+  display: none;
+}

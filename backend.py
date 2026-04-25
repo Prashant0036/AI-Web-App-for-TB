@@ -1,18 +1,43 @@
-# pip install "fastapi[standard]"
-# fastapi dev backend.py
-
-
+import os
 from fastapi import FastAPI, Request
-from routes import process   # import your routes
+from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 
-app = FastAPI()
+# Load environment variables
+load_dotenv()
 
-# include the routers
-app.include_router(process.router) 
-# /process end points wali requests ko handle krega ye route
+# Import routes
+from routes import process, auth
+
+app = FastAPI(title="TBRisk AI Backend")
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Include Routers
+app.include_router(process.router)
+app.include_router(auth.router, prefix="/auth")
 
 @app.get("/")
-def root():
-    return {"message": "Main backend running!"}
+def health_check():
+    return {
+        "status": "healthy",
+        "message": "TBRisk AI Backend is running!",
+        "version": "1.0.0"
+    }
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("backend:app", host="0.0.0.0", port=8000, reload=True)
 
 
