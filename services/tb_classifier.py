@@ -1,7 +1,13 @@
 import os
 import cv2
 import numpy as np
-import tensorflow as tf
+try:
+    import tflite_runtime.interpreter as tflite
+except ImportError:
+    try:
+        import tensorflow.lite as tflite
+    except ImportError:
+        tflite = None
 
 # Configuration
 IMG_SIZE = (256, 256)
@@ -20,9 +26,10 @@ def get_interpreter():
             print(f"Error: TFLite model file not found at {MODEL_PATH}")
             return None
         
-        print(f"Loading TFLite model from {MODEL_PATH}...")
         try:
-            _interpreter = tf.lite.Interpreter(model_path=MODEL_PATH)
+            if tflite is None:
+                raise ImportError("TFLite runtime not found.")
+            _interpreter = tflite.Interpreter(model_path=MODEL_PATH)
             _interpreter.allocate_tensors()
             
             # Get input and output details
@@ -56,16 +63,16 @@ async def predict_tb(file_bytes: bytes) -> dict:
         img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img_resized = cv2.resize(img_rgb, IMG_SIZE)
         
-        # VGG16 Preprocessing logic: Subtract mean [103.939, 116.779, 123.68]
-        # (This is what preprocess_input does for VGG16)
-        img_float = img_resized.astype(np.float32)
-        # Note: preprocess_input for VGG16 converts RGB to BGR and subtracts ImageNet mean
-        # Since we use RGB, we just simulate the subtraction if needed, or use tf.keras.applications.vgg16.preprocess_input
-        img_expanded = np.expand_dims(img_float, axis=0)
+        # VGG16 Preprocessing logic: RGB -> BGR and subtract ImageNet mean
+        img_bgr = img_resized[..., ::-1] # RGB to BGR
+        img_float = img_bgr.astype(np.float32)
         
-        # We can still use the utility from tf if installed
-        from tensorflow.keras.applications.vgg16 import preprocess_input
-        img_preprocessed = preprocess_input(img_expanded)
+        # ImageNet mean for BGR: [103.939, 116.779, 123.68]
+        img_float[..., 0] -= 103.939
+        img_float[..., 1] -= 116.779
+        img_float[..., 2] -= 123.68
+        
+        img_preprocessed = np.expand_dims(img_float, axis=0)
 
         # Set input tensor
         interpreter.set_tensor(_input_details[0]['index'], img_preprocessed)

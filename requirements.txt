@@ -13,9 +13,7 @@ PyJWT==2.9.0
 
 # --- AI & ML ---
 google-genai==0.3.0
-# tensorflow==2.17.0
-tensorflow-cpu==2.17.0
-# opencv-python==4.10.0.84
+tflite-runtime==2.14.0
 opencv-python-headless==4.10.0.84
 numpy==1.26.4
 
