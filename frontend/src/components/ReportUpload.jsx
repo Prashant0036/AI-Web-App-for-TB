@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { API_URLS } from '../config';
 import { Upload, FileText, Image as ImageIcon, CheckCircle2, AlertCircle, Loader2, Search, ArrowRight, X } from 'lucide-react';
 
 const ReportUpload = () => {
@@ -45,7 +46,7 @@ const ReportUpload = () => {
       formData.append('file', file);
 
       // Call Backend API instead of client-side Puter.js
-      const response = await fetch('http://127.0.0.1:8000/analyze-report', {
+      const response = await fetch(API_URLS.ANALYZE_REPORT, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('tb_token')}`,

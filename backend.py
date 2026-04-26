@@ -17,8 +17,8 @@ app.add_middleware(
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "http://localhost:3000",
-        "https://tbrisk-ai.netlify.app/",
-        "https://tbrisk-ai.run.place/",
+        "https://tbrisk-ai.netlify.app",
+        "https://tbrisk-ai.run.place",
         
     ],
     allow_credentials=True,
@@ -40,6 +40,6 @@ def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("backend:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("backend:app", host="0.0.0.0", port=10000, reload=True)
 
 

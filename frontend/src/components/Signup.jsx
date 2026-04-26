@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_URLS } from '../config';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserPlus, Mail, Lock, User, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -21,7 +22,7 @@ const Signup = () => {
     setError('');
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/auth/signup', {
+      const response = await fetch(API_URLS.AUTH.SIGNUP, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

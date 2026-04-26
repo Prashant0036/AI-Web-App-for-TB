@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_URLS } from '../config';
 import { useParams, Link } from 'react-router-dom';
 import { Activity, Calendar, FileText, CheckCircle2, Heart, ShieldAlert, Loader2, AlertCircle } from 'lucide-react';
 
@@ -11,7 +12,7 @@ const SharedReport = () => {
   useEffect(() => {
     const fetchReport = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/shared-report/${id}`);
+        const response = await fetch(API_URLS.SHARED_REPORT(id));
         if (!response.ok) {
           if (response.status === 404) throw new Error("Report not found or link has expired.");
           throw new Error("Failed to load the shared report.");

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_URLS } from '../config';
 import {
   LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   ReferenceLine
@@ -21,7 +22,7 @@ const HistoryTracker = () => {
   const [selectedReport, setSelectedReport] = useState(null);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
 
-  const BACKEND_URL = "http://127.0.0.1:8000/history";
+  const BACKEND_URL = API_URLS.HISTORY;
 
   const handleShare = (reportId) => {
     const shareUrl = `${window.location.origin}/shared/${reportId}`;

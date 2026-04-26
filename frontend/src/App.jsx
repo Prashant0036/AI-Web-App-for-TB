@@ -32,8 +32,9 @@ import HistoryTracker from './components/HistoryTracker';
 import DiagnosticFinder from './components/DiagnosticFinder';
 import ReportUpload from './components/ReportUpload';
 import SharedReport from './components/SharedReport';
+import { API_URLS } from './config';
 
-const BACKEND_URL = "http://127.0.0.1:8000/process";
+const BACKEND_URL = API_URLS.PROCESS;
 
 // ── Navbar (used only on non-landing pages) ──────────────────────────────────
 const Navbar = () => {

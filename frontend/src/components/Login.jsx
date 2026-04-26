@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_URLS } from '../config';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogIn, Mail, Lock, Loader2, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -20,7 +21,7 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/auth/login', {
+      const response = await fetch(API_URLS.AUTH.LOGIN, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
