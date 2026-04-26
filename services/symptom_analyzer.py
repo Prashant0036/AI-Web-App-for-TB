@@ -1,23 +1,12 @@
-import os
 import json
 import re
-from google import genai
-from google.genai import types
-from dotenv import load_dotenv
-
-load_dotenv()
-
-api_key = os.getenv("GEMINI_API_KEY")
+from services.gemini_client import generate_with_fallback
 
 async def analyze_symptoms(patient_data: dict) -> dict:
     """
-    Analyze patient symptoms using Gemini 2.0 Flash and provide risk score, tests, tips, and diet.
+    Analyze patient symptoms using Gemini (with fallback) and provide risk score, tests, tips, and diet.
     """
-    if not api_key:
-        return {"error": "API key not found", "score": 0}
-
     try:
-        client = genai.Client(api_key=api_key)
         
         prompt = f"""
         You are a Tuberculosis (TB) risk assessment consultant AI and Nutritionist.
@@ -35,12 +24,7 @@ async def analyze_symptoms(patient_data: dict) -> dict:
         {json.dumps(patient_data, indent=2)}
         """
 
-        response = client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=prompt
-        )
-        
-        text = response.text
+        text = await generate_with_fallback(contents=prompt)
         print("Gemini Symptom Analysis Raw Response:", text)
         
         # Extract JSON

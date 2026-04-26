@@ -1,25 +1,28 @@
-
-
 # --- Backend Framework ---
-fastapi==0.115.2
+fastapi[standard]==0.115.2
 uvicorn[standard]==0.32.0
+python-multipart==0.0.12
 
-# --- HTTP Requests ---
-requests==2.32.3
-
-# --- MongoDB Driver ---
-pymongo==4.10.1
+# --- Database ---
+pymongo[srv]==4.10.1
 dnspython==2.7.0
 
-# --- Environment Variables ---
+# --- Authentication ---
+bcrypt==4.2.0
+PyJWT==2.9.0
+
+# --- AI & ML ---
+google-genai==0.3.0
+tensorflow==2.17.0
+opencv-python==4.10.0.84
+numpy==1.26.4
+
+# --- Document Processing ---
+pdfplumber==0.11.4
+
+# --- Utilities ---
 python-dotenv==1.0.1
-
-# --- LLM Integration (Gemini) ---
-google-generativeai==0.7.1
-
-# --- Required internal FastAPI dependencies ---
-pydantic==2.9.2
-typing-extensions==4.12.2
-
-# --- Optional / nice-to-have ---
+requests==2.32.3
 colorama==0.4.6
+pydantic[email]==2.9.2
+typing-extensions==4.12.2

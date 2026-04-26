@@ -91,14 +91,14 @@ const SharedReport = () => {
         <div className="p-8 md:p-10">
 
           {/* Patient Details (If available) */}
-          {report.name && (
+          {(report.name || report.formData?.name) && (
             <div className="mb-10">
               <h3 className="text-lg font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">Patient Demographics</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                <div><span className="text-slate-400 block mb-1">Name</span><strong className="text-slate-700">{report.name}</strong></div>
-                <div><span className="text-slate-400 block mb-1">Age</span><strong className="text-slate-700">{report.age} yrs</strong></div>
-                <div><span className="text-slate-400 block mb-1">Gender</span><strong className="text-slate-700">{report.gender}</strong></div>
-                <div><span className="text-slate-400 block mb-1">Region</span><strong className="text-slate-700">{report.region || 'N/A'}</strong></div>
+                <div><span className="text-slate-400 block mb-1">Name</span><strong className="text-slate-700">{report.name || report.formData?.name || 'Patient'}</strong></div>
+                <div><span className="text-slate-400 block mb-1">Age</span><strong className="text-slate-700">{report.age || report.formData?.age || 'N/A'} yrs</strong></div>
+                <div><span className="text-slate-400 block mb-1">Gender</span><strong className="text-slate-700">{report.gender || report.formData?.gender || 'N/A'}</strong></div>
+                <div><span className="text-slate-400 block mb-1">Region</span><strong className="text-slate-700">{report.region || report.formData?.region || 'N/A'}</strong></div>
               </div>
             </div>
           )}

@@ -151,7 +151,10 @@ const AssessmentForm = () => {
       const payload = { ...formData };
       const response = await fetch(BACKEND_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('tb_token')}`
+        },
         body: JSON.stringify(payload)
       });
       if (!response.ok) throw new Error('Assessment failed');

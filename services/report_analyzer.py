@@ -1,26 +1,17 @@
-import os
 import io
 import pdfplumber
 import re
 import json
-from google import genai
 from google.genai import types
-from dotenv import load_dotenv
 from typing import Optional
+from services.gemini_client import generate_with_fallback
 
-load_dotenv()
-
-api_key = os.getenv("GEMINI_API_KEY")
 
 async def analyze_medical_report(file_bytes: bytes, mime_type: str, prompt_type: str = "general") -> dict:
     """
-    Analyze a medical report (image or PDF) using Gemini 2.0 Flash.
+    Analyze a medical report (image or PDF) using Gemini with model fallback.
     """
-    if not api_key:
-        return {"error": "API key not found", "risk_score": 0}
-
     try:
-        client = genai.Client(api_key=api_key)
         
         extracted_text = ""
         # Handle PDF specifically with pdfplumber
@@ -65,12 +56,7 @@ async def analyze_medical_report(file_bytes: bytes, mime_type: str, prompt_type:
                 types.Part.from_text(text=prompt)
             ]
         
-        response = client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=content
-        )
-        
-        text = response.text
+        text = await generate_with_fallback(contents=content)
         print("Gemini raw response:", text)
         
         # Extract JSON
