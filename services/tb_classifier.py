@@ -5,7 +5,7 @@ import tensorflow as tf
 
 # Configuration
 IMG_SIZE = (256, 256)
-MODEL_PATH = os.path.join(os.getcwd(), 'Tuberculosis-Detection', 'best_tb_model.tflite')
+MODEL_PATH = os.path.join(os.getcwd(), 'Tuberculosis_Detection', 'best_tb_model.tflite')
 
 # Global variable for the interpreter to avoid reloading
 _interpreter = None
